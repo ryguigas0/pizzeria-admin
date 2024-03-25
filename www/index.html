@@ -40,17 +40,32 @@
 </head>
 
 <body>
-    <div id="screen-order-list" class="app">
+    <div id="screen-order-list" class="screen">
         <div class="order-list">
 
         </div>
-        <button id="btn-new-order" class="btn btn-switch-screen" data-origin-screen="screen-order-list"
+        <button id="btn-new-order" class="large-btn btn-switch-screen" data-origin-screen="screen-order-list"
             data-next-screen="screen-new-order-form">New Order</button>
     </div>
-    <div id="screen-new-order-form" class="app hidden">
+    <div id="screen-new-order-form" class="screen hidden">
         <h1>Create order screen</h1>
-        <button id="btn-new-order" class="btn btn-switch-screen" data-origin-screen="screen-new-order-form"
-            data-next-screen="screen-order-list">Order List</button>
+        <div class="pizza-preview">
+
+        </div>
+        <div class="pizza-form">
+            <div class="form-input">
+                <label for="pizza-name">Name:</label>
+                <input type="text" name="pizza-name" id="pizza-name">
+            </div>
+            <div class="form-input">
+                <label for="pizza-price">Price:</label>
+                <input type="number" name="pizza-price" id="pizza-price">
+            </div>
+            <div class="btn-list">
+                <button id="btn-new-order" class="btn-switch-screen" data-origin-screen="screen-new-order-form"
+                    data-next-screen="screen-order-list">Cancel Order</button>
+            </div>
+        </div>
     </div>
 
     <script src="cordova.js"></script>
