@@ -21,19 +21,15 @@
 }
 
 body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
     background-color:#E4E4E4;
-    background-image:linear-gradient(to bottom, #A7A7A7 0%, #E4E4E4 51%);
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
     font-size:12px;
     height:100vh;
     margin:0px;
     padding:0px;
-    /* Padding to avoid the "unsafe" areas behind notches in the screen */
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-    text-transform:uppercase;
     width:100%;
 }
 
@@ -61,45 +57,86 @@ body {
     }
 }
 
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
+.app-lista {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width:99%;
+    height: 95%
 }
 
-.event {
-    border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+.superior {
+    flex: 10;
+    overflow: auto;
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+.inferior {
+    flex: 1;
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
+.linha {
+    position: relative;
+    padding: 10px;
+    border: solid;
+    font-size: 20px;
 }
 
-#deviceready.ready .event.listening { display: none; }
-#deviceready.ready .event.received { display: block; }
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.botao-novo {
+    width: 100%;
+    height: 99%;
+    font-size: 20px;
+    font-weight: bold;
 }
 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+.app-cadastro {
+    display: none;
+    flex-direction: column;
+    width:99%;
+    height: 90%
+}
+
+.imagem {
+    flex: 4;
+    border: solid;
+    background-color: #cccccc;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.form {
+    flex: 4;
+}
+
+.form-linha {
+    display: flex;
+    align-items: center;
+    margin-top: 10%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.form-linha-esq {
+    flex: 1;
+}
+
+.form-linha-dir {
+    flex: 5;
+}
+
+.botoes {
+    padding-top: 50px;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.botao {
+    flex: 1;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border: solid whitesmoke;
 }
 
 
