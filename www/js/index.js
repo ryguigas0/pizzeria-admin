@@ -21,7 +21,7 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
-const API_URL = 'https://pedidos-pizzaria.glitch.me/admin/pizzas/guiga-dev'
+let PIZZERIA_ID, currImgData;
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
@@ -34,6 +34,9 @@ function onDeviceReady() {
 
     document.getElementById("save-pizza").addEventListener("click", savePizza)
     document.getElementById("take-picture").addEventListener("click", takePicture)
+
+    currImgData = ""
+    PIZZERIA_ID =  "guigadev"
 }
 
 function changeScreen(btn) {
@@ -41,14 +44,51 @@ function changeScreen(btn) {
 
     document.getElementById(originScreen).classList.add("hidden")
     document.getElementById(nextScreen).classList.remove("hidden")
+
+    currImgData = "";
 }
 
 function savePizza() {
     console.log("SAVING PIZZA")
+    let pizzaName = document.querySelector("#pizza-name").value
+    let pizzaPrice = Number.parseFloat(document.querySelector("#pizza-price").value)
+
+    console.log({ PIZZERIA_ID, pizzaName, pizzaPrice, currImgData })
+
+    cordova.plugin.http.post("https://pedidos-pizzaria.glitch.me/admin/pizza",
+        {
+            pizzaria: PIZZERIA_ID,
+            pizza: pizzaName,
+            preco: pizzaPrice,
+            imagem: currImgData
+        },
+        {},
+        function (okResponse) {
+            console.log({ okResponse })
+            alert("Successfuly saved pizza")
+        },
+        function (errResponse) {
+            console.log({ errResponse })
+            alert("Error saving pizza")
+        })
 }
 
 function takePicture() {
-    console.log("TAKING PICTURE")
+    let preview = document.getElementById("pizza-preview")
+
+    navigator.camera.getPicture(onSuccess, onFail, {
+        quality: 10,
+        destinationType: Camera.DestinationType.DATA_URL
+    });
+
+    function onSuccess(imageData) {
+        currImgData = imageData
+        preview.style.backgroundImage = "url('data:image/jpeg;base64," + imageData + "')";
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
+    }
 }
 
 function deletePizza() {
