@@ -25,5 +25,15 @@ function onDeviceReady() {
     // Cordova is now initialized. Have fun!
 
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    document.getElementById('deviceready').classList.add('ready');
+
+    document.querySelectorAll(".btn-switch-screen")
+        .forEach(btnSwitchScreen => btnSwitchScreen.addEventListener("click", changeScreen))
+}
+
+function changeScreen(btn) {
+    let { nextScreen, originScreen } = btn.srcElement.dataset
+    console.log({ nextScreen, originScreen })
+
+    document.getElementById(originScreen).classList.add("hidden")
+    document.getElementById(nextScreen).classList.remove("hidden")
 }

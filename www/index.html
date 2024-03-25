@@ -40,13 +40,19 @@
 </head>
 
 <body>
-    <div class="app">
-        <h1>Apache Cordova</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
+    <div id="screen-order-list" class="app">
+        <div class="order-list">
+
         </div>
+        <button id="btn-new-order" class="btn btn-switch-screen" data-origin-screen="screen-order-list"
+            data-next-screen="screen-new-order-form">New Order</button>
     </div>
+    <div id="screen-new-order-form" class="app hidden">
+        <h1>Create order screen</h1>
+        <button id="btn-new-order" class="btn btn-switch-screen" data-origin-screen="screen-new-order-form"
+            data-next-screen="screen-order-list">Order List</button>
+    </div>
+
     <script src="cordova.js"></script>
     <script src="js/index.js"></script>
 </body>
