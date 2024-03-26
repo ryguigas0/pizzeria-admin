@@ -21,7 +21,7 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
-let PIZZERIA_ID, currImgData;
+let PIZZERIA_ID, currImgData, currOrderList;
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
@@ -37,6 +37,9 @@ function onDeviceReady() {
 
     currImgData = ""
     PIZZERIA_ID = "guiga"
+    currOrderList = []
+
+    listOrders()
 }
 
 function changeScreen(btn) {
@@ -48,8 +51,44 @@ function changeScreen(btn) {
     currImgData = "";
 }
 
+function listOrders() {
+    cordova.plugin.http.get("https://pedidos-pizzaria.glitch.me/admin/pizzas/" + PIZZERIA_ID,
+        {}, {},
+        function (okResponse) {
+            updateOrderList(JSON.parse(okResponse.data))
+        },
+        function (errResponse) {
+            alert("Error finding orders!")
+        })
+
+}
+
+function updateOrderList(orders) {
+    let htmlAcc = ""
+
+    for (let i = 0; i < orders.length; i++) {
+        const order = orders[i];
+
+        let fmtPrice = order.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
+        let orderPicture = order.imagem.startsWith('data:image/jpeg;base64,') ? 'class="order-picture placeholder-bg"' : 'class="order-picture" style="background-image: url(../img/placeholder.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;"'
+
+        htmlAcc += `
+        <div class="order-item">
+                <div ${orderPicture}></div>
+                <h2 class="order-name">
+                    ${order.pizza} | ${fmtPrice}
+                </h2>
+        </div>
+        `
+    }
+
+    let orderList = document.querySelector(".order-list")
+
+    orderList.innerHTML = htmlAcc
+}
+
 function savePizza() {
-    console.log("SAVING PIZZA")
     let pizzaName = document.querySelector("#pizza-name").value
     let pizzaPrice = Number.parseFloat(document.querySelector("#pizza-price").value)
 
@@ -68,11 +107,12 @@ function savePizza() {
         {},
         function (okResponse) {
             console.log({ okResponse })
-            alert("Successfuly saved pizza")
+            listOrders()
+            alert("Successfuly saved order")
         },
         function (errResponse) {
             console.log({ errResponse })
-            alert("Error saving pizza")
+            alert("Error saving order")
         })
 }
 
