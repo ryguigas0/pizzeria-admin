@@ -42,12 +42,28 @@ body {
     align-items: center;
 }
 
-.app-lista {
+.order-list {
     margin-top: 10px;
     display: flex;
     flex-direction: column;
-    width: 99%;
-    height: 95%
+    width: 100%;
+    height: 95%;
+    align-items: center;
+    gap: 1rem;
+    overflow-y: scroll;
+}
+
+.order-item {
+    width: 80%;
+    border: solid;
+    padding: 10px;
+    background-color: bisque;
+}
+
+.order-picture {
+    height: 24vh;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .btn-list {
@@ -74,8 +90,7 @@ body {
     }
 }
 
-
-.pizza-preview {
+.picture-preview {
     flex: 4;
     border: solid;
     background-color: #cccccc;
@@ -84,6 +99,11 @@ body {
     background-size: cover;
     width: 80%;
 }
+
+.placeholder-bg {
+    background-image: url(../img/placeholder.jpg);
+}
+
 
 .pizza-form {
     flex: 4;
