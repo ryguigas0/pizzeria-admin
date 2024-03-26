@@ -36,7 +36,7 @@ function onDeviceReady() {
     document.getElementById("take-picture").addEventListener("click", takePicture)
 
     currImgData = ""
-    PIZZERIA_ID =  "guigadev"
+    PIZZERIA_ID = "guiga"
 }
 
 function changeScreen(btn) {
@@ -55,12 +55,15 @@ function savePizza() {
 
     console.log({ PIZZERIA_ID, pizzaName, pizzaPrice, currImgData })
 
+    cordova.plugin.http.setDataSerializer('json');
+
     cordova.plugin.http.post("https://pedidos-pizzaria.glitch.me/admin/pizza",
         {
             pizzaria: PIZZERIA_ID,
             pizza: pizzaName,
             preco: pizzaPrice,
-            imagem: currImgData
+            // imagem: currImgData
+            imagem: "TODO: REMOVE PLACEHOLDER"
         },
         {},
         function (okResponse) {
@@ -77,13 +80,13 @@ function takePicture() {
     let preview = document.getElementById("pizza-preview")
 
     navigator.camera.getPicture(onSuccess, onFail, {
-        quality: 10,
+        quality: 1,
         destinationType: Camera.DestinationType.DATA_URL
     });
 
     function onSuccess(imageData) {
-        currImgData = imageData
-        preview.style.backgroundImage = "url('data:image/jpeg;base64," + imageData + "')";
+        currImgData = "'data:image/jpeg;base64," + imageData + "'"
+        preview.style.backgroundImage = "url(" + currImgData + ")";
     }
 
     function onFail(message) {
