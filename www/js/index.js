@@ -38,6 +38,10 @@ function onDeviceReady() {
     document.getElementById("delete-pizza").addEventListener("click", deletePizza)
     document.getElementById("delete-pizza").addEventListener("click", changeScreen)
 
+    document.getElementById("btn-new-order").addEventListener("click", function () {
+        switchEditForm()
+    })
+
     document.getElementById("take-picture").addEventListener("click", takePicture)
 
     currImgData = ""
@@ -138,8 +142,8 @@ function switchEditForm(order) {
         })
         deletePizzaBtn.classList.remove("hidden")
     } else {
-        orderNameInput.value = order.pizza
-        orderPriceInput.value = order.preco
+        orderNameInput.value = ''
+        orderPriceInput.value = ''
         picturePreview.style.backgroundImage = ''
         savePizzaBtn.addEventListener("click", savePizza)
         deletePizzaBtn.classList.add("hidden")
@@ -148,7 +152,7 @@ function switchEditForm(order) {
     //btn.srcElement.dataset
     changeScreen({ srcElement: { dataset: { nextScreen: 'screen-new-order-form', originScreen: 'screen-order-list' } } })
 
-    currImgData = order.imagem ? "" : order.imagem
+    currImgData = order ? order.imagem : ""
 }
 
 function savePizza() {
