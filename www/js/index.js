@@ -33,7 +33,11 @@ function onDeviceReady() {
         .forEach(btnSwitchScreen => btnSwitchScreen.addEventListener("click", changeScreen))
 
     document.getElementById("save-pizza").addEventListener("click", savePizza)
+    document.getElementById("save-pizza").addEventListener("click", changeScreen)
+
     document.getElementById("delete-pizza").addEventListener("click", deletePizza)
+    document.getElementById("delete-pizza").addEventListener("click", changeScreen)
+
     document.getElementById("take-picture").addEventListener("click", takePicture)
 
     currImgData = ""
@@ -80,7 +84,7 @@ function updateOrderList(orders) {
         orderItemElement.appendChild(generatePicturePreviewElement(order))
         orderItemElement.appendChild(generateOrderTitle(order))
 
-        orderItemElement.onclick = function (args) {
+        orderItemElement.onclick = function () {
             switchEditForm(order)
         }
 
