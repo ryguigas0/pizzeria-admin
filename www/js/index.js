@@ -33,6 +33,7 @@ function onDeviceReady() {
         .forEach(btnSwitchScreen => btnSwitchScreen.addEventListener("click", changeScreen))
 
     document.getElementById("save-pizza").addEventListener("click", savePizza)
+    document.getElementById("delete-pizza").addEventListener("click", deletePizza)
     document.getElementById("take-picture").addEventListener("click", takePicture)
 
     currImgData = ""
@@ -66,6 +67,8 @@ function listOrders() {
 
 function updateOrderList(orders) {
     let orderList = document.querySelector(".order-list")
+
+    orderList.innerHTML = ""
 
     for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
@@ -117,6 +120,7 @@ function switchEditForm(order) {
     let orderPriceInput = document.getElementById('pizza-price')
     let picturePreview = document.getElementById('pizza-preview')
     let savePizzaBtn = document.getElementById("save-pizza")
+    let deletePizzaBtn = document.getElementById("delete-pizza")
 
     savePizzaBtn.removeEventListener("click", savePizza)
     savePizzaBtn.removeEventListener("click", updatePizza)
@@ -128,12 +132,13 @@ function switchEditForm(order) {
         savePizzaBtn.addEventListener("click", function () {
             updatePizza(order["_id"])
         })
+        deletePizzaBtn.classList.remove("hidden")
     } else {
         orderNameInput.value = order.pizza
         orderPriceInput.value = order.preco
         picturePreview.style.backgroundImage = ''
-        savePizzaBtn.removeEventListener("click")
         savePizzaBtn.addEventListener("click", savePizza)
+        deletePizzaBtn.classList.add("hidden")
     }
 
     //btn.srcElement.dataset
@@ -217,5 +222,21 @@ function takePicture() {
 }
 
 function deletePizza() {
-    console.log("DELETING PIZZA")
+    let pizzaName = document.querySelector("#pizza-name").value
+
+    console.log({ PIZZERIA_ID, pizzaName })
+
+    cordova.plugin.http.setDataSerializer('json');
+
+    cordova.plugin.http.delete(encodeURI("https://pedidos-pizzaria.glitch.me/admin/pizza/" + PIZZERIA_ID + "/" + pizzaName),
+        {}, {},
+        function (okResponse) {
+            console.log({ okResponse })
+            listOrders()
+            alert("Successfuly deleted order")
+        },
+        function (errResponse) {
+            console.log({ errResponse })
+            alert("Error deleting order")
+        })
 }
