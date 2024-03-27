@@ -58,34 +58,88 @@ function listOrders() {
             updateOrderList(JSON.parse(okResponse.data))
         },
         function (errResponse) {
+            console.log({ errResponse })
             alert("Error finding orders!")
         })
 
 }
 
 function updateOrderList(orders) {
-    let htmlAcc = ""
+    let orderList = document.querySelector(".order-list")
 
     for (let i = 0; i < orders.length; i++) {
         const order = orders[i];
 
-        let fmtPrice = order.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+        let orderItemElement = document.createElement('div')
 
-        let orderPicture = order.imagem.startsWith('data:image/jpeg;base64,') ? 'class="order-picture placeholder-bg"' : 'class="order-picture" style="background-image: url(../img/placeholder.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;"'
+        orderItemElement.classList.add('order-item')
 
-        htmlAcc += `
-        <div class="order-item">
-                <div ${orderPicture}></div>
-                <h2 class="order-name">
-                    ${order.pizza} | ${fmtPrice}
-                </h2>
-        </div>
-        `
+        orderItemElement.appendChild(generatePicturePreviewElement(order))
+        orderItemElement.appendChild(generateOrderTitle(order))
+
+        orderItemElement.onclick = function (args) {
+            switchEditForm(order)
+        }
+
+        orderList.appendChild(orderItemElement)
+    }
+}
+
+function generateOrderTitle(order) {
+    let fmtPrice = order.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
+    let orderTitle = document.createElement('h2')
+    orderTitle.classList.add('order-name')
+    orderTitle.innerText = `${order.pizza} | ${fmtPrice}`
+
+    return orderTitle
+}
+
+function generatePicturePreviewElement(order, element) {
+    let orderItemElement = document.createElement('div')
+
+    if (order.imagem.startsWith('data:image/jpeg;base64,')) {
+        orderItemElement.classList.add('order-picture')
+        orderItemElement.style.backgroundImage = 'url(' + order.imagem + ')'
+        orderItemElement.style.backgroundRepeat = 'no-repeat'
+        orderItemElement.style.backgroundPosition = 'center'
+        orderItemElement.style.backgroundSize = 'cover'
+    } else {
+        orderItemElement.classList.add('order-picture', 'placeholder-bg')
     }
 
-    let orderList = document.querySelector(".order-list")
+    return orderItemElement
+}
 
-    orderList.innerHTML = htmlAcc
+function switchEditForm(order) {
+    console.log({ order })
+    let orderNameInput = document.getElementById('pizza-name')
+    let orderPriceInput = document.getElementById('pizza-price')
+    let picturePreview = document.getElementById('pizza-preview')
+    let savePizzaBtn = document.getElementById("save-pizza")
+
+    savePizzaBtn.removeEventListener("click", savePizza)
+    savePizzaBtn.removeEventListener("click", updatePizza)
+
+    if (order) {
+        orderNameInput.value = order.pizza
+        orderPriceInput.value = order.preco
+        picturePreview.style.backgroundImage = order.imagem.startsWith('data:image/jpeg;base64,') ? 'url(' + order.imagem + ')' : 'url(../img/placeholder.jpg)'
+        savePizzaBtn.addEventListener("click", function () {
+            updatePizza(order["_id"])
+        })
+    } else {
+        orderNameInput.value = order.pizza
+        orderPriceInput.value = order.preco
+        picturePreview.style.backgroundImage = ''
+        savePizzaBtn.removeEventListener("click")
+        savePizzaBtn.addEventListener("click", savePizza)
+    }
+
+    //btn.srcElement.dataset
+    changeScreen({ srcElement: { dataset: { nextScreen: 'screen-new-order-form', originScreen: 'screen-order-list' } } })
+
+    currImgData = order.imagem ? "" : order.imagem
 }
 
 function savePizza() {
@@ -113,6 +167,34 @@ function savePizza() {
         function (errResponse) {
             console.log({ errResponse })
             alert("Error saving order")
+        })
+}
+
+function updatePizza(orderId) {
+    let pizzaName = document.querySelector("#pizza-name").value
+    let pizzaPrice = Number.parseFloat(document.querySelector("#pizza-price").value)
+
+    console.log({ PIZZERIA_ID, orderId, pizzaName, pizzaPrice, currImgData })
+
+    cordova.plugin.http.setDataSerializer('json');
+
+    cordova.plugin.http.put("https://pedidos-pizzaria.glitch.me/admin/pizza",
+        {
+            pizzaria: PIZZERIA_ID,
+            pizzaid: orderId,
+            pizza: pizzaName,
+            preco: pizzaPrice,
+            // imagem: currImgData
+            imagem: "TODO: REMOVE UPDATE PLACEHOLDER"
+        },
+        {},
+        function (okResponse) {
+            listOrders()
+            alert("Successfuly updated order")
+        },
+        function (errResponse) {
+            console.log({ errResponse })
+            alert("Error updating order")
         })
 }
 

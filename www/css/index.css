@@ -25,6 +25,8 @@ body {
     -webkit-text-size-adjust: none;
     background-color: #E4E4E4;
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
+    color: black;
+    border-color: black;
     font-size: 12px;
     height: 100vh;
     margin: 0px;
